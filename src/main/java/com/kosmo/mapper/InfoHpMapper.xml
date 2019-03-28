@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.impl.InfoHpImpl">
+
+	<select id="getHpInfo" resultType="com.kosmo.model.HospitalDTO" parameterType="String">
+		select * from hospital where hp_idx=#{param1}
+	</select>
+	<select id="getHpTimeInfo" resultType="com.kosmo.model.TreattimeDTO" parameterType="String">
+			select * from treattime where treat_hp_idx=#{param1} and treat_dy=#{param2}
+	</select>
+	<select id="getHpReview" resultType="com.kosmo.model.ReviewDTO" parameterType="String">
+		select rvw_score, rvw_content, rvw_regidate, mem_name from member M, review R where M.mem_idx = R.rvw_mem_idx and RVW_HP_IDX=#{param1}
+	</select>
+	<select id="getRvwCount" parameterType="String" resultType="String">
+		select count(*) from review where rvw_hp_idx=#{param1}
+	</select>
+	<select id="getRvwAvg" parameterType="String" resultType="String">
+		select trunc(avg(rvw_score),2) from review where rvw_hp_idx=#{param1} group by rvw_hp_idx
+	</select>
+	<!-- <select id="getNumHospital" resultType="String">
+		select count(*) from hospital
+	</select>
+	<select id="getNumReserv" resultType="String">
+		select count(*) from reservation
+	</select> -->
+	
+	
+	<select id="getCountAge" resultType="com.kosmo.model.MemberDTO" parameterType="String">
+		SELECT 
+		SUBSTR((EXTRACT(YEAR FROM SYSDATE) - (DECODE(SUBSTR(mem_birth,7,1),'1', '19','2','19','20') || SUBSTR(mem_birth,3,2)) +101),-2,1) as mem_idx,count(*) as mem_birth
+		FROM  reservation, member
+		where reservation.resv_mem_idx = member.mem_idx
+		and reservation.resv_hp_idx = #{param1}
+		group by SUBSTR((EXTRACT(YEAR FROM SYSDATE) - (DECODE(SUBSTR(mem_birth,7,1),'1', '19','2','19','20') || SUBSTR(mem_birth,3,2)) +101),-2,1)
+		order by mem_idx asc
+	</select>
+	<select id="getWNum" resultType="String">
+	select count(*)
+		from reservation R, member M where R.resv_mem_idx = M.mem_idx and resv_hp_idx=#{param1} and mem_gender='w'
+	</select>
+	
+	<select id="getMNum" resultType="String">
+	select count(*)
+		from reservation R, member M where R.resv_mem_idx = M.mem_idx and resv_hp_idx=#{param1} and (mem_gender='M' or mem_gender='m')
+	</select>
+</mapper>

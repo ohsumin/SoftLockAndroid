@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kosmo.impl.HospitalImpl">
+	<select id="searchHp" resultType="com.kosmo.model.HospListDTO" parameterType="com.kosmo.model.HospListDTO">
+	     SELECT * FROM hosplist WHERE 1=1 
+		 <choose>
+		     <when test='hosplist_name == "ㄱ"'>
+			    and (hosplist_name LIKE '^(ㄱ|ㄲ)' OR ( hosplist_name <![CDATA[ > ]]>= '가' AND hosplist_name <![CDATA[ < ]]> '나' ))
+			 </when>
+			 <when test='hosplist_name == "ㄴ"'>
+			    and (hosplist_name LIKE '^ㄴ' OR ( hosplist_name <![CDATA[ > ]]>= '나' AND hosplist_name <![CDATA[ < ]]> '다' ))
+			 </when>
+			 <when test='hosplist_name == "ㄷ"'>
+			    and (hosplist_name LIKE '^(ㄷ|ㄸ)' OR ( hosplist_name <![CDATA[ > ]]>= '다' AND hosplist_name <![CDATA[ < ]]> '라' ))
+			 </when>
+			 <when test='hosplist_name == "ㄹ"'>
+			    and (hosplist_name LIKE '^ㄹ' OR ( hosplist_name <![CDATA[ > ]]>= '라' AND hosplist_name <![CDATA[ < ]]> '마' ))
+			 </when>
+			 <when test='hosplist_name == "ㅁ"'>
+			    and (hosplist_name LIKE '^ㅁ' OR ( hosplist_name <![CDATA[ > ]]>= '마' AND hosplist_name <![CDATA[ < ]]> '바' ))
+			 </when>
+			 <when test='hosplist_name == "ㅂ"'>
+			    and (hosplist_name LIKE '^ㅂ' OR ( hosplist_name <![CDATA[ > ]]>= '바' AND hosplist_name <![CDATA[ < ]]> '사' ))
+			 </when>
+			 <when test='hosplist_name == "ㅅ"'>
+			    and (hosplist_name LIKE '^(ㅅ|ㅆ)' OR ( hosplist_name <![CDATA[ > ]]>= '사' AND hosplist_name <![CDATA[ < ]]> '아' ))
+			 </when>
+			 <when test='hosplist_name == "ㅇ"'>
+			     and (hosplist_name LIKE '^ㅇ' OR ( hosplist_name <![CDATA[ > ]]>= '아' AND hosplist_name <![CDATA[ < ]]> '자' ))
+			 </when>
+			 <when test='hosplist_name == "ㅈ"'>
+			    and (hosplist_name LIKE '^(ㅈ|ㅉ)' OR ( hosplist_name <![CDATA[ > ]]>= '자' AND hosplist_name <![CDATA[ < ]]> '차' ))
+			 </when>
+			 <when test='hosplist_name == "ㅊ"'>
+			    and (hosplist_name LIKE '^ㅊ' OR ( hosplist_name <![CDATA[ > ]]>= '차' AND hosplist_name <![CDATA[ < ]]> '카' ))
+			 </when>
+			 <when test='hosplist_name == "ㅋ"'>
+			    and (hosplist_name LIKE '^ㅋ' OR ( hosplist_name <![CDATA[ > ]]>= '카' AND hosplist_name <![CDATA[ < ]]> '타' ))
+			 </when>
+			 <when test='hosplist_name == "ㅌ"'>
+			     and (hosplist_name LIKE '^ㅌ' OR ( hosplist_name <![CDATA[ > ]]>= '타' AND hosplist_name <![CDATA[ < ]]> '파' ))
+			 </when>
+			 <when test='hosplist_name == "ㅍ"'>
+			    and (hosplist_name LIKE '^ㅍ' OR ( hosplist_name <![CDATA[ > ]]>= '파' AND hosplist_name <![CDATA[ < ]]> '하' ))
+			 </when>
+			 <when test='hosplist_name == "ㅎ"'>
+			    and (hosplist_name LIKE '^ㅎ' OR ( hosplist_name <![CDATA[ > ]]>= '하'))
+			 </when>
+			 <otherwise>
+		     	and hosplist_name LIKE '%'||#{hosplist_name}||'%'  
+			 </otherwise>
+		</choose>
+		ORDER BY hosplist_name ASC
+	</select>
+	
+	<select id="login" resultType="com.kosmo.model.HospitalDTO" parameterType="String">
+      select * from hospital where hp_id=#{0} and hp_pw=#{1}
+    </select>
+   
+	<select id="isUser" resultType="int" parameterType="String">
+		select count(*) from hospital
+			where hp_id=#{0} and hp_pw=#{1}
+	</select>
+	
+	<select id="isPerm" parameterType="String" resultType="String">
+		select hp_perm from hospital where hp_id=#{0}
+	</select>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="delete">
+		DELETE FROM hospital WHERE hp_id=#{param1}
+	</delete>
+	
+	<!-- 아이디중복 -->
+	<select id="isUserId" resultType="int" parameterType="String">
+		select count(*) from hospital
+			where hp_id=#{0}
+	</select>
+	
+	<!-- 회원정보 수정폼 진입 읽기 및 수정 동시에가능 -->
+	<select id="viewModify" resultType="com.kosmo.model.HospitalDTO" >
+		select * from hospital where hp_idx=#{param1}
+	</select>
+	<select id="viewModifytime" resultType="com.kosmo.model.TreattimeDTO">
+		select * from treattime where treat_hp_idx=#{param1}
+	</select>
+
+	<!-- 회원정보수정 영업시간제외 -->
+   <update id="modifyAction">
+		update hospital set 
+		             hp_hpphone=#{param2},
+		             hp_night=#{param3},
+		             hp_intro=#{param4},
+		             hp_notice=#{param5},
+		             hp_ori_filename=#{param6},
+		             hp_stored_filename=#{param7}
+		where hp_idx=#{param1}
+   </update>
+   <!-- 회원정보수정 영업시간 -->
+   <update id="treatmodifyAction">
+		update treattime set
+		             treat_open=#{param3},
+		             treat_close=#{param4}
+		where treat_hp_idx=#{param1} and treat_dy=#{param2}
+   </update>
+    
+   <!-- 회원정보 수정시 treattime테이블에 월~금 레코드 추가 -->
+   <insert id="addTreatTime">
+   		insert into treattime values(SEQ_TREATTIME.nextval, #{param1}, #{param2}, #{param3}, #{param4})
+   </insert>
+  
+   
+   
+   <insert id="hpJoinAction" parameterType="String">
+   		INSERT INTO hospital(hp_idx, hp_id, hp_pw, hp_name, hp_num, hp_username, hp_email, hp_phone, hp_address, hp_address2, hp_type)
+   			VALUES(seq_hospital.nextval , #{param1}, #{param2}, #{param3}, #{param4}, #{param5}, #{param6}, #{param7}, #{param8}, #{param9}, #{param10})
+   </insert>
+
+   <!-- 회원정보 가져오기 -->   
+   <select id="loginHp" resultType="com.kosmo.model.HospitalDTO" parameterType="String">
+      select * from hospital where hp_id=#{param1} and hp_pw=#{param2}
+   </select>
+   <!-- 회원정보 가져오기 -->   
+   <select id="loginHpid" resultType="com.kosmo.model.HospitalDTO" parameterType="String">
+      select * from hospital where hp_id=#{param1}
+   </select>
+   
+   <!-- 예약회원리스트를 위한 전체게시물 가져오기 -->
+      <select id="getTotalCount" resultType="int">
+      SELECT COUNT(*) FROM reservation where resv_hp_idx=#{param1}
+   </select>
+   <!-- 예약회원 리스트출력 -->
+    <select id="listPage" resultType="com.kosmo.model.ReservationDTO">
+      SELECT * FROM(SELECT Tb.*, rownum rNum FROM  ( 
+            SELECT resv_idx, mem_name, resv_date, resv_time, resv_regidate, resv_perm
+              FROM member M, reservation R WHERE M.mem_idx = R.resv_mem_idx and resv_hp_idx = #{param3}
+                     ORDER BY R.resv_idx DESC
+          )Tb
+      )WHERE rNum BETWEEN #{param1} AND #{param2}
+   </select> 
+   <!-- 예약회원 상세보기 -->
+   <select id="reservView" resultType="com.kosmo.model.ReservationDTO">
+      SELECT * FROM ( 
+          SELECT resv_idx, mem_name, resv_date, resv_time, mem_birth, mem_email, mem_id, mem_gender,mem_phone, resv_perm, resv_symp, resv_req
+                FROM member M, reservation R WHERE M.mem_idx = R.resv_mem_idx 
+      )WHERE resv_idx=#{param1}
+   </select>
+   <!-- 예약회원 승인 -->
+   <update id="reservConf">
+      update reservation set resv_perm='예약확정' where resv_idx=#{param1}
+   </update>
+   <!-- 예약회원 거절 -->
+   <update id="reservRej">
+      update reservation set resv_perm='예약거절' where resv_idx=#{param1}
+   </update>
+   <!-- 예약회원 진료완료 -->
+   <update id="hp_resvDone">
+      update reservation set resv_perm='진료완료' where resv_idx=#{param1}
+   </update>
+   
+   
+</mapper>

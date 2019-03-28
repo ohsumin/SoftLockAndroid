@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.kosmo.impl.ResvImpl">
+
+	<select id="getTime" resultType="com.kosmo.model.TreattimeDTO" parameterType="String">
+		select * from treattime 
+			where treat_hp_idx=#{param1} and treat_dy=#{param2}
+	</select>
+	
+	<select id="getResv" resultType="com.kosmo.model.ReservationDTO" parameterType="String">
+		select * from reservation
+			where resv_hp_idx=#{param1} and resv_date=#{param2}
+	</select>
+	
+	<insert id="resvInsert">
+		insert into reservation (resv_idx, resv_hp_idx, resv_mem_idx, resv_symp, resv_req, resv_date, resv_time) 
+			values(seq_reservation.nextval, #{param1}, #{param2}, #{param3}, #{param4}, #{param5}, #{param6}) 
+	</insert>
+	
+</mapper>

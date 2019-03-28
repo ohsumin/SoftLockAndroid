@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.kosmo.impl.MemberImpl">
+
+   <select id="login" resultType="com.kosmo.model.MemberDTO" parameterType="String">
+      select * from member where mem_id=#{0} and mem_pw=#{1}
+   </select>
+   
+   <insert id ="memjoinAction" parameterType="String">
+		INSERT INTO member
+		(MEM_IDX, MEM_ID, MEM_PW, MEM_NAME, MEM_BIRTH, MEM_PHONE, MEM_GENDER, MEM_EMAIL) 
+		VALUES (seq_member.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
+	</insert>
+	
+	<select id="isAuth" parameterType="String" resultType="String">
+		select mem_auth from member where mem_id=#{0}
+	</select>
+	
+	<select id="isUser" resultType="int" parameterType="String">
+		select count(*) from member
+			where mem_id=#{0} and mem_pw=#{1}
+	</select>
+	<!-- 회원정보 수정폼 진입 -->
+	<select id="view" resultType="com.kosmo.model.MemberDTO" >
+		SELECT * FROM member where mem_id=#{param1}
+	</select>
+	<!-- 회원정보수정 -->
+	<update id="modifyAction">
+	UPDATE member SET mem_pw=#{param1}, mem_phone=#{param3}, mem_name=#{param2} WHERE mem_id=#{param4}
+	</update>
+	<!-- 회원탈퇴 -->
+	<delete id="delete">
+		DELETE FROM member WHERE mem_id=#{param1}
+	</delete>
+	
+	<!-- 유저 인증키 난수로 업데이트 -->
+	<update id="GetKey" parameterType="Map">update member set mem_auth=#{param2} where mem_id=#{param1} </update>
+	<!-- 회원 인증키(난수) y로 변경 -->
+	<update id="alter_userKey" parameterType="Map"> update member set mem_auth='y' where mem_id=#{param1} and mem_auth=#{param2} </update>
+	
+	<select id="isUserId" resultType="int" parameterType="String">
+		select count(*) from member
+			where mem_id=#{0}
+	</select>
+	
+	<update id="alter_naverKey" parameterType="String">
+		update member set mem_auth='y' where mem_id=#{param1}
+	</update>
+	
+	<!-- 아이디 찾기 -->
+	<select id="searchId" resultType="String">
+		select nvl(mem_id, 0) from member 
+        where mem_name = #{mem_name} and mem_phone = #{mem_phone} and mem_auth = 'y'
+	</select>
+	
+	<select id="userInfo" resultType="com.kosmo.model.MemberDTO">
+		select mem_name from member 
+        where mem_id=#{param1}
+	</select>
+	
+	<!-- 회원 임시 비밀번호-->
+	<update id="searchPassword" parameterType="Map">
+		update member set mem_pw = #{param3} where mem_id = #{param1} and mem_email = #{param2}
+	</update>
+	
+	<!-- 멤버의 접수현황 레코드 갯수  -->
+	<select id="reserMemCount" resultType="int">
+		select count(*) 
+		From reservation 
+		where resv_mem_idx=#{param1}
+	</select>
+	<!-- 멤버 idx && 진료 'c'인 레코드 갯수 -->
+	<select id="reserCount" resultType="int">
+		select count(*) 
+		From reservation res, member mem
+		where res.resv_mem_idx = mem.mem_idx and res.resv_mem_idx=#{0} and res.resv_perm='c'
+	</select>
+	<!-- 페이지 start end -->
+	<select id="reservationPage" resultType="com.kosmo.model.ReservationDTO" >
+	SELECT * FROM(SELECT Tb.*, rownum rNum FROM  ( 
+            SELECT *
+              FROM reservation res, hospital hos
+              WHERE res.resv_hp_idx = hos.hp_idx and res.resv_mem_idx=#{param3}
+              ORDER BY resv_idx DESC
+          )Tb
+      )WHERE rNum BETWEEN #{param1} AND #{param2}
+	</select>
+	<select id="reserPage" resultType="com.kosmo.model.ReservationDTO" >
+      	SELECT * FROM(SELECT Tb.*, rownum rNum FROM  ( 
+            SELECT *
+              FROM reservation res, hospital hos
+              WHERE res.resv_hp_idx = hos.hp_idx and res.resv_perm = '진료완료' and res.resv_mem_idx=#{param3}
+              ORDER BY resv_idx DESC
+          )Tb
+      )WHERE rNum BETWEEN #{param1} AND #{param2}
+	</select>
+	<!-- 예약 삭제 처리하기 -->
+	<delete id="reserdelete">
+		DELETE FROM reservation WHERE resv_idx=#{0}
+	</delete>
+	
+	
+	<!-- 스크랩 -->
+	<select id="ClipCheck" resultType="int" parameterType="String">
+	   select count(*) from clip where clip_mem_idx=#{0} and clip_hp_idx=#{1}
+	</select>
+	<insert id ="instClip" parameterType="String">
+		insert into clip (clip_idx,clip_mem_idx,clip_hp_idx)	values (seq_clip.nextval,#{param1},#{param2})
+	</insert>
+	<delete id="ClipDelete">
+		delete from clip WHERE clip_mem_idx = #{param1} and clip_hp_idx = #{param2}
+	</delete>
+	
+	<select id="clipRecordCount" resultType="int" >
+      	select COUNT(*) from clip where clip_mem_idx=#{param1}
+	</select>
+	<select id="clipRecordPage" resultType="com.kosmo.model.HospitalDTO" >
+		select *
+		 	 from(select tb.*, rownum rnum from  ( 
+		       select *
+		         from clip cli, hospital hos
+		         where cli.clip_hp_idx = hos.hp_idx and cli.clip_mem_idx=${param3}
+		         order by clip_idx desc
+		     )tb
+		 )where rnum between ${param1} and ${param2}
+	</select>
+	<delete id="memClipDelete">
+		delete from clip WHERE clip_mem_idx = #{param1} and clip_hp_idx = #{param2}
+	</delete>
+
+</mapper>

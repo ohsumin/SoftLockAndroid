@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.kosmo.impl.AndroidImpl">
+
+	<insert id ="memjoinAction" parameterType="String">
+		INSERT INTO member
+		(MEM_IDX, MEM_ID, MEM_PW, MEM_NAME, MEM_BIRTH, MEM_PHONE, MEM_GENDER, MEM_EMAIL, MEM_AUTH) 
+		VALUES (seq_member.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8})
+	</insert>
+				<!-- 전체과목이고 hp_night=y이고 hp_wkend=""
+				전체과목이고 hp_night=""이고 hp_wkend=y이면	
+				전체과목이고 hp_night=y이고 hp_wkend=y이면
+				전체과목이고 hp_night=""이고 hp_wkend=""
+ -->	<select id="searchHp" resultType="com.kosmo.model.HospitalDTO" parameterType="com.kosmo.model.HospitalDTO">
+		<choose>
+			<when test='hp_night.equals("y") and hp_wkend.equals("0")'>
+				select * from hospital where hp_name LIKE '%'||#{hp_name}||'%' and hp_night='y' and hp_type LIKE '%'||#{hp_type}||'%'
+			</when>
+			<when test='hp_night.equals("0") and hp_wkend.equals("y")'>
+				select * from hospital where hp_name LIKE '%'||#{hp_name}||'%' and hp_wkend='y' and hp_type LIKE '%'||#{hp_type}||'%'
+			</when>
+			<when test='hp_night.equals("y") and hp_wkend.equals("y")'>
+				select * from hospital where hp_name LIKE '%'||#{hp_name}||'%' and hp_night='y' and hp_wkend='y' and hp_type LIKE '%'||#{hp_type}||'%'
+			</when>
+			<when test='hp_night.equals("0") and hp_wkend.equals("0")'>
+				select * from hospital where hp_name LIKE '%'||#{hp_name}||'%' and hp_type LIKE '%'||#{hp_type}||'%'
+			</when>		
+		</choose>
+	</select>
+	
+	<!-- 예약내역리스트 -->
+	<select id="reservationPage" resultType="com.kosmo.model.ReservationDTO" >
+		
+		select * from reservation RESV, hospital HOSP 
+			where RESV.resv_hp_idx=HOSP.hp_idx 
+				and RESV.resv_mem_idx=#{param1} and resv_perm !='진료완료'		
+	</select>
+	
+	<!-- 진료완료 리스트 -->
+	<select id="reservationPage2" resultType="com.kosmo.model.ReservationDTO" >
+		
+		select * from reservation RESV, hospital HOSP 
+		where RESV.resv_hp_idx=HOSP.hp_idx 
+			and RESV.resv_mem_id=#{param1} and resv_perm ='진료완료'		
+	</select>
+	
+	<!-- 스크랩  -->
+	<select id="clipRecordPage" resultType="com.kosmo.model.HospitalDTO" >
+		
+		 	 
+		       select * from clip CLI, hospital HOSP
+		        	 where CLI.clip_hp_idx = HOSP.hp_idx 
+		        	 	and CLI.clip_mem_idx=#{param1}
+		       			  order by clip_idx desc
+		         
+		     
+	</select>
+	
+</mapper>
