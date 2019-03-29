@@ -59,4 +59,8 @@
 		     
 	</select>
 	
+	
+	<select id="getHpInfo" resultType="com.kosmo.model.HospitalDTO" parameterType="String">
+      select * from hospital where hp_idx=#{param1}
+   </select>
 </mapper>

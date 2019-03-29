@@ -12,10 +12,11 @@ public interface AndroidImpl {
 	
 	public ArrayList<HospitalDTO> searchHp(HospitalDTO hDTO);
 	
-	public ArrayList<ReservationDTO> reservationPage(int resv_idx);
+	public ArrayList<ReservationDTO> reservationPage(String resv_idx);
 	
 	public ArrayList<ReservationDTO> reservationPage2(int resv_idx);
 	
 	public ArrayList<HospitalDTO> clipRecordPage(int clip_mem_idx);
 	
+	public HospitalDTO getHpInfo(String hp_idx);
 }

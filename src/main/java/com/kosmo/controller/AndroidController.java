@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kosmo.impl.AndroidImpl;
+import com.kosmo.impl.InfoHpImpl;
 import com.kosmo.impl.MemberImpl;
 import com.kosmo.model.HospitalDTO;
 import com.kosmo.model.MemberDTO;
@@ -62,9 +63,9 @@ public class AndroidController {
 		MemberDTO vo = sqlSession.getMapper(MemberImpl.class).login(mem_id, mem_pw);
 		session.setAttribute("memberInfo", vo);
 		
-		System.out.println(((MemberDTO)session.getAttribute("memberInfo")).getMem_name());
+		int mem_idx = ((MemberDTO)session.getAttribute("memberInfo")).getMem_idx();
 		
-		map.put("isSuccess", "success");
+		map.put("mem_idx", mem_idx);
 		return map; 
 	}
 	
@@ -107,29 +108,24 @@ public class AndroidController {
 	
 	@RequestMapping("/Android/reservationlist")
 	@ResponseBody
-	public ArrayList<ReservationDTO> memberModify(Model model, HttpServletRequest req,
+	public ArrayList<ReservationDTO> reservationlist(Model model, HttpServletRequest req,
 			HttpSession session) {
-		int mem_idx = ((MemberDTO)session.getAttribute("memberInfo")).getMem_idx();
+		System.out.println(" 아ㅣ아아아아");
+		String mem_idx = req.getParameter("mem_idx");
+		System.out.println(mem_idx);
 		
+		//Map<String, Object> map = new HashMap<String, Object>();
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		//회원정보 가져오기
-		MemberDTO dto = sqlSession.getMapper(MemberImpl.class)
-				.view(((MemberDTO)session.getAttribute("memberInfo")).getMem_id());
-		model.addAttribute("dto", dto);
-		
-		
-	
 		ArrayList<ReservationDTO> reservationDTO = sqlSession.getMapper(AndroidImpl.class).reservationPage(mem_idx);
 		
-	    map.put("reservationDTO", reservationDTO);
+	    //map.put("reservationDTO", reservationDTO);
 		
 	    return reservationDTO;
 	}
 	
 	@RequestMapping("/Android/reservationlist2")
 	@ResponseBody
-	public ArrayList<ReservationDTO> memberModify2(Model model, HttpServletRequest req,
+	public ArrayList<ReservationDTO> reservationlist2(Model model, HttpServletRequest req,
 			HttpSession session) {
 		int mem_idx = ((MemberDTO)session.getAttribute("memberInfo")).getMem_idx();
 		
@@ -169,4 +165,45 @@ public class AndroidController {
 		
 		return HospitalDTO;
 	}
+	
+	   //병원상세페이지 불러오기
+	   @RequestMapping("/Android/info_hp")
+	   @ResponseBody
+	   public Map<String, Object> andInfoHp(HttpServletRequest req) {
+	      String hp_idx = req.getParameter("hp_idx");
+	      
+	      HospitalDTO hDTO = sqlSession.getMapper(InfoHpImpl.class).getHpInfo(hp_idx);
+	      Map<String, Object> info_hp = new HashMap<String, Object>();
+	      
+	      HospitalDTO hospitalDTO = new HospitalDTO();
+	      hospitalDTO.setHp_name(hDTO.getHp_name());
+	      hospitalDTO.setHp_address(hDTO.getHp_address());
+	      hospitalDTO.setHp_address2(hDTO.getHp_address2());
+	      hospitalDTO.setHp_phone(hDTO.getHp_phone());
+	      hospitalDTO.setHp_intro(hDTO.getHp_intro());
+	      hospitalDTO.setHp_notice(hDTO.getHp_notice());
+	      
+	      info_hp.put("HospitalDTO", hospitalDTO);
+	      
+	      
+	      //TreattimeDTO tList = new TreattimeDTO();
+	      /*ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(InfoHpImpl.class).getHpTimeInfo2(hp_idx);
+	      info_hp.put("tDTO", tDTO);*/
+	      
+	      
+	      
+	      /*String[] treat_dy= {"월","화","수","목","금","토","일"};
+	      //ArrayList<TreattimeDTO> tList = new ArrayList<TreattimeDTO>();
+	      TreattimeDTO tList = new TreattimeDTO();
+	      
+	      for(int i = 0; i<treat_dy.length; i++) {
+	         ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(InfoHpImpl.class).getHpTimeInfo(hp_idx, treat_dy[i]);
+	         tList.setTreat_open(tDTO.get(i).getTreat_open());
+	         info_hp.put("tList", tList);
+	         System.out.println("sdfsf"+tDTO.get(i).getTreat_open());
+	      }*/
+	      
+	      
+	      return info_hp;
+	   }
 }

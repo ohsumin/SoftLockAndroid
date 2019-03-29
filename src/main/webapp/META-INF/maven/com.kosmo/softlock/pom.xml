@@ -147,7 +147,36 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.5.4</version>
-        </dependency>     
+        </dependency>    
+        
+        <dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		
+		<!-- 채팅설정을 위한 웻소켓 및 제이슨 의존설정 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>4.3.22.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+		
+		<dependency>
+
+		<groupId>org.codehaus.jackson</groupId>
+		
+		<artifactId>jackson-mapper-asl</artifactId>
+		
+		<version>1.9.13</version>
+		
+		</dependency>
+		 
 	</dependencies>
     <build>
         <plugins>

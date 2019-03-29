@@ -21,7 +21,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.kosmo.controller" />
+	<context:component-scan base-package="com.kosmo" />
 	
 	<!-- SPRING JDBC를 사용하기 위한 커넥션 빈 생성. 
 	JAVA파일에서 커넥션 객체를 생성하지 않고 XML설정파일에서 
