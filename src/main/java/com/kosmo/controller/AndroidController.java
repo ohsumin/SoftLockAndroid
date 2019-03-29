@@ -106,6 +106,7 @@ public class AndroidController {
 		return searchList;
 	}
 	
+	// 예약대기리스트
 	@RequestMapping("/Android/reservationlist")
 	@ResponseBody
 	public ArrayList<ReservationDTO> reservationlist(Model model, HttpServletRequest req,
@@ -123,6 +124,7 @@ public class AndroidController {
 	    return reservationDTO;
 	}
 	
+	// 진료내역리스트
 	@RequestMapping("/Android/reservationlist2")
 	@ResponseBody
 	public ArrayList<ReservationDTO> reservationlist2(Model model, HttpServletRequest req,

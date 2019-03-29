@@ -32,7 +32,7 @@
 	</select>
 	
 	<!-- 예약내역리스트 -->
-	<select id="reservationPage" resultType="com.kosmo.model.ReservationDTO" >
+	<select id="reservationPage" resultType="com.kosmo.model.ReservationDTO">
 		
 		select * from reservation RESV, hospital HOSP 
 			where RESV.resv_hp_idx=HOSP.hp_idx 
