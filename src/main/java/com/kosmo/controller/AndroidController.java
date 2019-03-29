@@ -129,20 +129,15 @@ public class AndroidController {
 	@ResponseBody
 	public ArrayList<ReservationDTO> reservationlist2(Model model, HttpServletRequest req,
 			HttpSession session) {
-		int mem_idx = ((MemberDTO)session.getAttribute("memberInfo")).getMem_idx();
+		System.out.println(" 아ㅣ아아아아");
+		String mem_idx = req.getParameter("mem_idx");
+		System.out.println(mem_idx);
 		
+		//Map<String, Object> map = new HashMap<String, Object>();
 		
-		Map<String, Object> map = new HashMap<String, Object>();
-		//회원정보 가져오기
-		MemberDTO dto = sqlSession.getMapper(MemberImpl.class)
-				.view(((MemberDTO)session.getAttribute("memberInfo")).getMem_id());
-		model.addAttribute("dto", dto);
-		
-		
-	
 		ArrayList<ReservationDTO> reservationDTO = sqlSession.getMapper(AndroidImpl.class).reservationPage2(mem_idx);
 		
-	    map.put("reservationDTO", reservationDTO);
+	    //map.put("reservationDTO", reservationDTO);
 		
 	    return reservationDTO;
 	}

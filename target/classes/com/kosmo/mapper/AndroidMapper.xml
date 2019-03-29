@@ -44,7 +44,7 @@
 		
 		select * from reservation RESV, hospital HOSP 
 		where RESV.resv_hp_idx=HOSP.hp_idx 
-			and RESV.resv_mem_id=#{param1} and resv_perm ='진료완료'		
+			and RESV.resv_mem_idx=#{param1} and resv_perm ='진료완료'		
 	</select>
 	
 	<!-- 스크랩  -->
