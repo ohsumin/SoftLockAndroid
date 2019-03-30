@@ -1,10 +1,13 @@
 package com.kosmo.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -113,17 +116,39 @@ public class AndroidController {
 	public ArrayList<ReservationDTO> reservationlist(Model model, HttpServletRequest req,
 			HttpSession session) {
 		System.out.println(" 아ㅣ아아아아");
+		String resv_idx = req.getParameter("resv_idx");
 		String mem_idx = req.getParameter("mem_idx");
 		System.out.println(mem_idx);
+		System.out.println(resv_idx);
 		
-		//Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		ArrayList<ReservationDTO> reservationDTO = sqlSession.getMapper(AndroidImpl.class).reservationPage(mem_idx);
 		
-	    //map.put("reservationDTO", reservationDTO);
+	    map.put("resv_idx", resv_idx);
 		
 	    return reservationDTO;
 	}
+	
+	//예약 삭제 처리
+		@RequestMapping("/Android/reserdelete")
+		@ResponseBody
+		public void reserdelete(HttpServletRequest req,HttpServletResponse response) throws IOException {
+			
+			String resv_idx = req.getParameter("resv_idx");
+			//String hp_name = req.getParameter("hp_name");
+			//String resv_date = req.getParameter("resv_date");
+			
+			System.out.println("resv_idx="+resv_idx);
+			//System.out.println("hp_name="+hp_name);
+			//System.out.println("resv_date="+resv_date);
+			
+			//ReservationDTO rDTO = sqlSession.getMapper(MemberImpl.class).reservation(resv_idx);
+			sqlSession.getMapper(AndroidImpl.class).reserdelete(resv_idx);
+			
+			
+
+		}
 	
 	// 진료내역리스트
 	@RequestMapping("/Android/reservationlist2")

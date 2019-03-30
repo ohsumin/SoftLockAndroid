@@ -47,6 +47,11 @@
 			and RESV.resv_mem_idx=#{param1} and resv_perm ='진료완료'		
 	</select>
 	
+	<!-- 예약취소 -->
+	<delete id="reserdelete">
+		DELETE FROM reservation WHERE resv_idx=#{param1}
+	</delete>
+	
 	<!-- 스크랩  -->
 	<select id="clipRecordPage" resultType="com.kosmo.model.HospitalDTO" >
 		
