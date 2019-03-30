@@ -66,6 +66,7 @@ public class AndroidController {
 		int mem_idx = ((MemberDTO)session.getAttribute("memberInfo")).getMem_idx();
 		
 		map.put("mem_idx", mem_idx);
+		
 		return map; 
 	}
 	
