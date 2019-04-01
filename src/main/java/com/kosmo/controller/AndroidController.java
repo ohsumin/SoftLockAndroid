@@ -76,12 +76,13 @@ public class AndroidController {
 	
 	@RequestMapping("/Android/searchHp")
 	@ResponseBody
-	public ArrayList<HospitalDTO> searchHp(HttpServletRequest req){
+	public ArrayList<HospitalDTO> searchHp(HttpServletRequest req, HttpSession session){
 		
 		String hp_type = req.getParameter("hp_type");
 		String hp_night = req.getParameter("hp_night");
 		String hp_weekend = req.getParameter("hp_weekend");
 		String hp_name = req.getParameter("hp_name");
+		
 		
 		if(hp_type.equals("전체과목"))
 			hp_type = "";
@@ -103,10 +104,15 @@ public class AndroidController {
 		
 		System.out.println("searchHp호출");
 		ArrayList<HospitalDTO> searchList = sqlSession.getMapper(AndroidImpl.class).searchHp(hDTO);
+		session.setAttribute("hpInfo", searchList);
 		for(int i=0; i<searchList.size(); i++) {
 			System.out.println(searchList.get(i).getHp_idx()+"/"+searchList.get(i).getHp_name());
 		}
+		Map<String, Object> map = new HashMap<String, Object>();
+	      
+		int hp_idx = ((HospitalDTO)session.getAttribute("searchList")).getHp_idx();
 		
+	      map.put("Hp_idx", hp_idx);
 		
 		return searchList;
 	}
@@ -190,7 +196,7 @@ public class AndroidController {
 		return HospitalDTO;
 	}
 	
-	   //병원상세페이지 불러오기
+	   /*//병원상세페이지 불러오기
 	   @RequestMapping("/Android/info_hp")
 	   @ResponseBody
 	   public Map<String, Object> andInfoHp(HttpServletRequest req) {
@@ -211,12 +217,12 @@ public class AndroidController {
 	      
 	      
 	      //TreattimeDTO tList = new TreattimeDTO();
-	      /*ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(InfoHpImpl.class).getHpTimeInfo2(hp_idx);
-	      info_hp.put("tDTO", tDTO);*/
+	      ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(InfoHpImpl.class).getHpTimeInfo2(hp_idx);
+	      info_hp.put("tDTO", tDTO);
 	      
 	      
 	      
-	      /*String[] treat_dy= {"월","화","수","목","금","토","일"};
+	      String[] treat_dy= {"월","화","수","목","금","토","일"};
 	      //ArrayList<TreattimeDTO> tList = new ArrayList<TreattimeDTO>();
 	      TreattimeDTO tList = new TreattimeDTO();
 	      
@@ -225,11 +231,11 @@ public class AndroidController {
 	         tList.setTreat_open(tDTO.get(i).getTreat_open());
 	         info_hp.put("tList", tList);
 	         System.out.println("sdfsf"+tDTO.get(i).getTreat_open());
-	      }*/
+	      }
 	      
 	      
 	      return info_hp;
-	   }
+	   }*/
 	   
 	 //병원상세페이지 불러오기
 	   @RequestMapping("/Android/info_hp")
@@ -249,7 +255,9 @@ public class AndroidController {
 	      hospitalDTO.setHp_notice(hDTO.getHp_notice());
 	      
 	      info_hp.put("HospitalDTO", hospitalDTO);
+	      Map<String, Object> map = new HashMap<String, Object>();
 	      
+	      map.put("hp_idx", hp_idx);
 	      
 	      //TreattimeDTO tList = new TreattimeDTO();
 	      ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(AndroidImpl.class).getHpTimeInfo2(hp_idx);
