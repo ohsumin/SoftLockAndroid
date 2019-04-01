@@ -74,11 +74,12 @@
 		where resv_mem_idx=#{param1}
 	</select>
 	<!-- 멤버 idx && 진료 'c'인 레코드 갯수 -->
+	
 	<select id="reserCount" resultType="int">
-		select count(*) 
-		From reservation res, member mem
-		where res.resv_mem_idx = mem.mem_idx and res.resv_mem_idx=#{0} and res.resv_perm='c'
-	</select>
+      select count(*)
+      From reservation res, member mem
+      where res.resv_mem_idx = mem.mem_idx and res.resv_mem_idx=#{param1} and res.resv_perm='진료완료'
+   </select>
 	<!-- 페이지 start end -->
 	<select id="reservationPage" resultType="com.kosmo.model.ReservationDTO" >
 	SELECT * FROM(SELECT Tb.*, rownum rNum FROM  ( 
