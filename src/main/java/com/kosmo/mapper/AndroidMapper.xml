@@ -68,4 +68,14 @@
 	<select id="getHpInfo" resultType="com.kosmo.model.HospitalDTO" parameterType="String">
       select * from hospital where hp_idx=#{param1}
    </select>
+   
+   <select id="getHpTimeInfo2" resultType="com.kosmo.model.TreattimeDTO" parameterType="String">
+         select * from treattime where treat_hp_idx=#{param1}
+   </select>
+   <select id="getHpInfo" resultType="com.kosmo.model.HospitalDTO" parameterType="String">
+		select * from hospital where hp_name=#{param1}
+	</select>
+	<select id="getIdx" resultType="String" parameterType="String">
+		select hp_idx from hospital where hp_name=#{param1}
+	</select>
 </mapper>

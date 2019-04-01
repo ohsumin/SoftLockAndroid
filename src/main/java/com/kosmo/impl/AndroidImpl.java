@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.kosmo.model.HospitalDTO;
 import com.kosmo.model.ReservationDTO;
+import com.kosmo.model.TreattimeDTO;
 
 public interface AndroidImpl {
 	
@@ -18,7 +19,13 @@ public interface AndroidImpl {
 	
 	public ArrayList<HospitalDTO> clipRecordPage(int clip_mem_idx);//스크랩
 	
-	public HospitalDTO getHpInfo(String hp_idx);
+		
 	
 	public void reserdelete(String resv_idx);//예약취소
+	
+	public ArrayList<TreattimeDTO> getHpTimeInfo2(String treat_hp_idx);//상세정보
+	
+	public HospitalDTO getHpInfo(String hp_name);
+	
+	public String getIdx(String hp_name);
 }
