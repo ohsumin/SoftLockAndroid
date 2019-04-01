@@ -241,9 +241,12 @@ public class AndroidController {
 	   @RequestMapping("/Android/info_hp")
 	   @ResponseBody
 	   public Map<String, Object> getHpTimeInfo2(HttpServletRequest req) {
-	      String hp_idx = req.getParameter("hp_idx");
+	      String hp_name = req.getParameter("hp_name");
 	      
-	      HospitalDTO hDTO = sqlSession.getMapper(InfoHpImpl.class).getHpInfo(hp_idx);
+	      String hpIdx = sqlSession.getMapper(AndroidImpl.class).getIdx(hp_name);
+	      
+	      
+	      HospitalDTO hDTO = sqlSession.getMapper(AndroidImpl.class).getHpInfo(hp_name);
 	      Map<String, Object> info_hp = new HashMap<String, Object>();
 	      
 	      HospitalDTO hospitalDTO = new HospitalDTO();
@@ -257,10 +260,10 @@ public class AndroidController {
 	      info_hp.put("HospitalDTO", hospitalDTO);
 	      Map<String, Object> map = new HashMap<String, Object>();
 	      
-	      map.put("hp_idx", hp_idx);
+	      map.put("hp_name", hp_name);
 	      
 	      //TreattimeDTO tList = new TreattimeDTO();
-	      ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(AndroidImpl.class).getHpTimeInfo2(hp_idx);
+	      ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(AndroidImpl.class).getHpTimeInfo2(hpIdx);
 	      info_hp.put("tDTO", tDTO);
 	      
 	      
