@@ -59,7 +59,7 @@
 		       select * from clip CLI, hospital HOSP
 		        	 where CLI.clip_hp_idx = HOSP.hp_idx 
 		        	 	and CLI.clip_mem_idx=#{param1}
-		       			  order by clip_idx desc
+		       			  order by clip_idx desc 
 		         
 		     
 	</select>
