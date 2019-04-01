@@ -23,6 +23,7 @@ import com.kosmo.impl.MemberImpl;
 import com.kosmo.model.HospitalDTO;
 import com.kosmo.model.MemberDTO;
 import com.kosmo.model.ReservationDTO;
+import com.kosmo.model.TreattimeDTO;
 
 @Controller
 public class AndroidController {
@@ -212,6 +213,47 @@ public class AndroidController {
 	      //TreattimeDTO tList = new TreattimeDTO();
 	      /*ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(InfoHpImpl.class).getHpTimeInfo2(hp_idx);
 	      info_hp.put("tDTO", tDTO);*/
+	      
+	      
+	      
+	      /*String[] treat_dy= {"월","화","수","목","금","토","일"};
+	      //ArrayList<TreattimeDTO> tList = new ArrayList<TreattimeDTO>();
+	      TreattimeDTO tList = new TreattimeDTO();
+	      
+	      for(int i = 0; i<treat_dy.length; i++) {
+	         ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(InfoHpImpl.class).getHpTimeInfo(hp_idx, treat_dy[i]);
+	         tList.setTreat_open(tDTO.get(i).getTreat_open());
+	         info_hp.put("tList", tList);
+	         System.out.println("sdfsf"+tDTO.get(i).getTreat_open());
+	      }*/
+	      
+	      
+	      return info_hp;
+	   }
+	   
+	 //병원상세페이지 불러오기
+	   @RequestMapping("/Android/info_hp")
+	   @ResponseBody
+	   public Map<String, Object> getHpTimeInfo2(HttpServletRequest req) {
+	      String hp_idx = req.getParameter("hp_idx");
+	      
+	      HospitalDTO hDTO = sqlSession.getMapper(InfoHpImpl.class).getHpInfo(hp_idx);
+	      Map<String, Object> info_hp = new HashMap<String, Object>();
+	      
+	      HospitalDTO hospitalDTO = new HospitalDTO();
+	      hospitalDTO.setHp_name(hDTO.getHp_name());
+	      hospitalDTO.setHp_address(hDTO.getHp_address());
+	      hospitalDTO.setHp_address2(hDTO.getHp_address2());
+	      hospitalDTO.setHp_phone(hDTO.getHp_phone());
+	      hospitalDTO.setHp_intro(hDTO.getHp_intro());
+	      hospitalDTO.setHp_notice(hDTO.getHp_notice());
+	      
+	      info_hp.put("HospitalDTO", hospitalDTO);
+	      
+	      
+	      //TreattimeDTO tList = new TreattimeDTO();
+	      ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(AndroidImpl.class).getHpTimeInfo2(hp_idx);
+	      info_hp.put("tDTO", tDTO);
 	      
 	      
 	      
