@@ -1,7 +1,6 @@
 package com.kosmo.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kosmo.impl.AndroidImpl;
-import com.kosmo.impl.InfoHpImpl;
 import com.kosmo.impl.MemberImpl;
 import com.kosmo.model.HospitalDTO;
 import com.kosmo.model.MemberDTO;
@@ -86,7 +84,7 @@ public class AndroidController {
 		
 		if(hp_type.equals("전체과목"))
 			hp_type = "";
-		if(hp_night.equals(""))
+		if(hp_night.equals("")) 
 			hp_night = "0";
 		if(hp_weekend.equals(""))
 			hp_weekend = "0";
@@ -108,12 +106,7 @@ public class AndroidController {
 		for(int i=0; i<searchList.size(); i++) {
 			System.out.println(searchList.get(i).getHp_idx()+"/"+searchList.get(i).getHp_name());
 		}
-		Map<String, Object> map = new HashMap<String, Object>();
-	      
-		int hp_idx = ((HospitalDTO)session.getAttribute("searchList")).getHp_idx();
-		
-	      map.put("Hp_idx", hp_idx);
-		
+	   		
 		return searchList;
 	}
 	
