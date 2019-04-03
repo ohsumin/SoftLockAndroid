@@ -25,7 +25,7 @@ public interface AndroidImpl {
 	
 	public ArrayList<TreattimeDTO> getHpTimeInfo2(String treat_hp_idx);//상세정보
 	
-	public HospitalDTO getHpInfo(String hp_name);
+	public HospitalDTO getHpInfo(String hp_idx);
 	
 	public String getIdx(String hp_name);
 }

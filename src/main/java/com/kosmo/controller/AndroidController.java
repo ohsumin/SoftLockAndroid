@@ -234,44 +234,19 @@ public class AndroidController {
 	   @RequestMapping("/Android/info_hp")
 	   @ResponseBody
 	   public Map<String, Object> getHpTimeInfo2(HttpServletRequest req) {
+		  System.out.println("info_hp진입");
 	      String hp_name = req.getParameter("hp_name");
 	      
 	      String hpIdx = sqlSession.getMapper(AndroidImpl.class).getIdx(hp_name);
 	      
-	      
-	      HospitalDTO hDTO = sqlSession.getMapper(AndroidImpl.class).getHpInfo(hp_name);
 	      Map<String, Object> info_hp = new HashMap<String, Object>();
 	      
-	      HospitalDTO hospitalDTO = new HospitalDTO();
-	      hospitalDTO.setHp_name(hDTO.getHp_name());
-	      hospitalDTO.setHp_address(hDTO.getHp_address());
-	      hospitalDTO.setHp_address2(hDTO.getHp_address2());
-	      hospitalDTO.setHp_phone(hDTO.getHp_phone());
-	      hospitalDTO.setHp_intro(hDTO.getHp_intro());
-	      hospitalDTO.setHp_notice(hDTO.getHp_notice());
+	      HospitalDTO hospitalDTO = sqlSession.getMapper(AndroidImpl.class).getHpInfo(hpIdx);
 	      
-	      info_hp.put("HospitalDTO", hospitalDTO);
-	      Map<String, Object> map = new HashMap<String, Object>();
-	      
-	      map.put("hp_name", hp_name);
-	      
-	      //TreattimeDTO tList = new TreattimeDTO();
+	      info_hp.put("HospitalDTO", hospitalDTO); // 병원정보넣기
+	    
 	      ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(AndroidImpl.class).getHpTimeInfo2(hpIdx);
-	      info_hp.put("tDTO", tDTO);
-	      
-	      
-	      
-	      /*String[] treat_dy= {"월","화","수","목","금","토","일"};
-	      //ArrayList<TreattimeDTO> tList = new ArrayList<TreattimeDTO>();
-	      TreattimeDTO tList = new TreattimeDTO();
-	      
-	      for(int i = 0; i<treat_dy.length; i++) {
-	         ArrayList<TreattimeDTO> tDTO = sqlSession.getMapper(InfoHpImpl.class).getHpTimeInfo(hp_idx, treat_dy[i]);
-	         tList.setTreat_open(tDTO.get(i).getTreat_open());
-	         info_hp.put("tList", tList);
-	         System.out.println("sdfsf"+tDTO.get(i).getTreat_open());
-	      }*/
-	      
+	      info_hp.put("tDTO", tDTO); // 시간넣기
 	      
 	      return info_hp;
 	   }
