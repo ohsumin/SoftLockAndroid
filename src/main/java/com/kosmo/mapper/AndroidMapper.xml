@@ -59,7 +59,7 @@
 		       select * from clip CLI, hospital HOSP
 		        	 where CLI.clip_hp_idx = HOSP.hp_idx 
 		        	 	and CLI.clip_mem_idx=#{param1}
-		       			  order by clip_idx desc
+		       			  order by clip_idx desc 
 		         
 		     
 	</select>
@@ -75,4 +75,10 @@
 	<select id="getIdx" resultType="String" parameterType="String">
 		select hp_idx from hospital where hp_name=#{param1}
 	</select>
+	
+	 <insert id ="reservationAction" parameterType="String">
+      INSERT INTO reservation
+      (RESV_IDX,RESV_HP_IDX,RESV_MEM_IDX,RESV_SYMP,RESV_REQ,RESV_DATE,RESV_TIME) 
+      VALUES (SEQ_RESERVATION.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6})
+   </insert>
 </mapper>

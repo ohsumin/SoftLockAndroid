@@ -1,7 +1,11 @@
 package com.kosmo.controller;
 
 import java.io.IOException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -250,4 +254,43 @@ public class AndroidController {
 	      
 	      return info_hp;
 	   }
+	   
+	   @RequestMapping("/Android/reservationAction")
+	   @ResponseBody
+	   public Map<String, Object> reservationAction(HttpServletRequest req, HttpSession session) throws ParseException{
+	      System.out.println("진입!!!");
+	      
+	      String hp_idx = req.getParameter("hp_idx"); 
+	      String mem_idx = req.getParameter("mem_idx");
+	      String resv_req = req.getParameter("resv_req");
+	      String resv_symp = req.getParameter("resv_symp");
+	      String resv_date = req.getParameter("resv_date");
+	      String resv_time = req.getParameter("resv_time");
+	      resv_time = resv_time.replaceAll(" ", "");
+	      String from = resv_date;
+	      SimpleDateFormat transFormat = new SimpleDateFormat("yyyy/MM/dd");
+	      Date to = transFormat.parse(from);
+	      String from1 = transFormat.format(to);
+	      
+	      System.out.println(hp_idx);
+	      System.out.println(mem_idx);
+	      System.out.println(resv_req);
+	      System.out.println(resv_symp);
+	      System.out.println(from1);
+	      System.out.println(resv_time);
+	            
+	      Map<String, Object> map = new HashMap<String, Object>();
+
+	      // 예약
+	      sqlSession.getMapper(AndroidImpl.class).reservationAction(hp_idx, mem_idx, resv_req, resv_symp, from1, resv_time);
+	      // 로그인
+	      //MemberDTO vo = sqlSession.getMapper(MemberImpl.class).login(mem_id, mem_pw);
+	      //session.setAttribute("memberInfo", vo);
+	      
+	      //int mem_idx = ((MemberDTO)session.getAttribute("memberInfo")).getMem_idx();
+	      
+	      map.put("mem_idx", mem_idx);
+	      return map; 
+	   }
+	   
 }

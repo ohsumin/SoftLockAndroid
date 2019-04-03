@@ -28,4 +28,8 @@ public interface AndroidImpl {
 	public HospitalDTO getHpInfo(String hp_idx);
 	
 	public String getIdx(String hp_name);
+	
+	public void reservationAction(String hp_idx, String mem_idx, String resv_req, String resv_symp, 
+	         String resv_date, String resv_time);//예ㅒ약
+	
 }
