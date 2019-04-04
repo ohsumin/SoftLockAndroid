@@ -1,7 +1,6 @@
 package com.kosmo.controller;
 
 import java.io.IOException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class AndroidController {
 		
 		String mem_id = req.getParameter("mem_id"); 
 		String mem_pw = req.getParameter("mem_pw");
-		String mem_name = req.getParameter("mem_name");
+		/*String mem_name = req.getParameter("mem_name");
 		String mem_phone = req.getParameter("mem_phone");
 		String mem_gender = req.getParameter("mem_gender");
 		String mem_email = req.getParameter("mem_email");
@@ -54,17 +53,17 @@ public class AndroidController {
 		System.out.println(mem_birth_year);
 		System.out.println(mem_birth_month);
 		System.out.println(mem_birth_day);
-		System.out.println(mem_birth);
+		System.out.println(mem_birth);*/
 				
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		// 회원가입여부 확인
-		int isUser = sqlSession.getMapper(MemberImpl.class).isUserId(mem_id);
+		/*int isUser = sqlSession.getMapper(MemberImpl.class).isUserId(mem_id);
 		// 만약 회원가입이 되어있지 않으면
 		if(isUser != 1) {
 			// 회원가입
 			sqlSession.getMapper(AndroidImpl.class).memjoinAction(mem_id, mem_pw, mem_name, mem_birth, mem_phone, mem_gender, mem_email, mem_auth);
-		} 	
+		} */	
 		// 로그인
 		MemberDTO vo = sqlSession.getMapper(MemberImpl.class).login(mem_id, mem_pw);
 		session.setAttribute("memberInfo", vo);
@@ -130,6 +129,7 @@ public class AndroidController {
 		ArrayList<ReservationDTO> reservationDTO = sqlSession.getMapper(AndroidImpl.class).reservationPage(mem_idx);
 		
 	    map.put("resv_idx", resv_idx);
+	    map.put("mem_idx", mem_idx);
 		
 	    return reservationDTO;
 	}
